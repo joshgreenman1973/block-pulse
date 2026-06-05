@@ -1,0 +1,4 @@
+data/cron.log
+data/cron.err
+.DS_Store
+.claude/

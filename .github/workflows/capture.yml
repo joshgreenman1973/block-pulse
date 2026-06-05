@@ -1,0 +1,33 @@
+name: hourly-capture
+on:
+  schedule:
+    - cron: '5 * * * *'      # ~hourly (GitHub cron is best-effort, may drift a few min)
+  workflow_dispatch:          # allows manual "Run workflow" button
+permissions:
+  contents: write
+concurrency:
+  group: capture
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Score the pristine cameras
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python3 score_now.py
+      - name: Commit new readings
+        run: |
+          git config user.name  "block-pulse-bot"
+          git config user.email "actions@github.com"
+          git add data/activity_log.csv data/latest.json data/timeline.json
+          if git diff --cached --quiet; then
+            echo "no new data"
+          else
+            git commit -m "capture: hourly reading"
+            git push
+          fi

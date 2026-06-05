@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block Pulse — NYC street-camera coverage & live aliveness</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{ --ink:#15171a; --muted:#6b7178; --good:#1a9850; --marg:#f4a020; --bad:#b8bcc2; --paper:#faf8f4; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink)}
+  #app{display:flex;height:100%}
+  #side{width:340px;flex:0 0 340px;overflow-y:auto;padding:20px 22px;background:var(--paper);border-right:1px solid #e6e2da}
+  #map{flex:1;position:relative}
+  h1{font-size:21px;margin:0 0 2px;letter-spacing:-.3px}
+  .sub{color:var(--muted);font-size:12.5px;margin:0 0 14px;line-height:1.45}
+  .caveat{background:#fff7e6;border:1px solid #f0d28a;border-left:4px solid var(--marg);border-radius:6px;
+          padding:11px 13px;font-size:12px;line-height:1.5;color:#5a4a20;margin:0 0 6px}
+  .caveat b{color:#3d3210}
+  .mapbanner{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:600;
+             background:rgba(21,23,26,.86);color:#fff;font-size:12px;font-weight:500;
+             padding:7px 15px;border-radius:20px;font-family:-apple-system,sans-serif;
+             box-shadow:0 2px 10px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap}
+  .mapbanner b{color:#ffd24d}
+  h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:22px 0 8px;border-bottom:1px solid #e6e2da;padding-bottom:5px}
+  .stat{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
+  .stat b{font-variant-numeric:tabular-nums}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0;cursor:pointer;user-select:none}
+  .sw{width:14px;height:14px;border-radius:50%;flex:0 0 14px;border:1px solid rgba(0,0,0,.25)}
+  .toggle input{margin:0}
+  .leaderboard{font-size:12.5px}
+  .lb{display:flex;align-items:center;gap:8px;padding:3px 0}
+  .lb .bar{height:9px;border-radius:5px;background:linear-gradient(90deg,#f4a020,#d7301f)}
+  .lb .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lb .v{font-variant-numeric:tabular-nums;font-weight:600;width:18px;text-align:right}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:6px}
+  .pill{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:10px;background:#eee;color:#444;margin-left:6px;vertical-align:middle}
+  .leaflet-popup-content{font-size:13px;line-height:1.4}
+  .leaflet-popup-content b{font-size:13.5px}
+  footer{margin-top:24px;font-size:11px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="side">
+    <h1>Block Pulse <span class="pill" id="clock">live</span></h1>
+    <p class="sub">Every NYC DOT street camera, graded for whether it can see sidewalk life — and a live read of how alive each block is, scored by a vision model.</p>
+
+    <div class="caveat">
+      <b>This watches a sliver of the city.</b>
+      NYC DOT runs ~960 cameras to manage <i>traffic</i>, not street life. They cover roughly <b>1% of the city's ~6,300 street-miles</b> and about <b>7% of signalized intersections</b> — clustered on arterials and bridges. Of the 744 on neighborhood streets, only <b>390 (≈40%)</b> can actually see a sidewalk, and <b>87 of the 99 best are in Manhattan</b>. The Bronx and Staten Island are almost all highway — effectively unwatched here.
+    </div>
+
+    <h2>Coverage of the 744 street cameras</h2>
+    <div class="stat"><span>Pristine (clear sidewalk life)</span><b id="s-good">99</b></div>
+    <div class="stat"><span>Usable with care</span><b id="s-marg">291</b></div>
+    <div class="stat"><span>Not usable (highway/wide/fouled)</span><b id="s-bad">354</b></div>
+
+    <h2>Show on map</h2>
+    <label class="toggle"><input type="checkbox" id="t-good" checked><span class="sw" style="background:var(--good)"></span>Pristine — sized by live activity</label>
+    <label class="toggle"><input type="checkbox" id="t-marg" checked><span class="sw" style="background:var(--marg)"></span>Usable with care</label>
+    <label class="toggle"><input type="checkbox" id="t-bad"><span class="sw" style="background:var(--bad)"></span>Rejected (shows the dead zones)</label>
+
+    <h2>Most alive right now</h2>
+    <div class="leaderboard" id="leader"></div>
+    <div class="note" id="asof"></div>
+
+    <h2>Rhythm by hour</h2>
+    <canvas id="rhythm" width="300" height="120" style="width:100%;height:120px"></canvas>
+    <div class="note" id="rnote">Captures accumulate hourly into <code>data/activity_log.csv</code>. With one reading so far this shows a single point — the curve fills in over the next day once the scheduler runs.</div>
+
+    <footer>
+      Source: NYC DOT traffic cameras (webcams.nyctmc.org), graded + scored by Claude Haiku.
+      352×240 frames — aggregate activity only, no individuals identifiable. Coverage skews to Manhattan; Bronx & Staten Island are largely highway and absent.
+    </footer>
+  </div>
+  <div id="map">
+    <div class="mapbanner">These cameras see ~<b>1% of NYC streets</b> — and most can't see a sidewalk at all</div>
+  </div>
+</div>
+
+<script>
+const map = L.map('map',{zoomControl:true}).setView([40.735,-73.96],12);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+  {attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+
+const COL={GOOD:'#1a9850',MARGINAL:'#f4a020',BAD:'#b8bcc2'};
+const layers={GOOD:L.layerGroup(),MARGINAL:L.layerGroup(),BAD:L.layerGroup()};
+
+function activityColor(a){ // 0..10 -> amber to deep red
+  if(a==null) return '#1a9850';
+  const t=Math.max(0,Math.min(1,a/10));
+  const r=Math.round(244+(215-244)*t), g=Math.round(160+(48-160)*t), b=Math.round(32+(31-32)*t);
+  return `rgb(${r},${g},${b})`;
+}
+
+Promise.all([
+  fetch('data/cameras.json').then(r=>r.json()),
+  fetch('data/latest.json').then(r=>r.ok?r.json():{generated:null,scores:{}}).catch(()=>({generated:null,scores:{}}))
+]).then(([cams,latest])=>{
+  const live=[];
+  cams.forEach(c=>{
+    const rec=latest.scores[c.id];
+    c.activity = rec?rec.activity:null;        // most-recent read, not the baked snapshot
+    c.peds = rec?rec.peds:null;
+    if(c.activity!=null) live.push(c);
+    let m;
+    if(c.grade==='GOOD'){
+      const a=c.activity;
+      const radius = a==null?5 : 4+a*1.3;
+      m=L.circleMarker([c.lat,c.lon],{radius,color:'#0b6b34',weight:1,
+        fillColor:activityColor(a),fillOpacity:.9});
+      m.bindPopup(`<b>${c.name}</b><br>${c.area} · pristine`+
+        (a!=null?`<br><b>Activity (last check): ${a}/10</b> (~${c.peds} pedestrians)`:'<br><span style="color:#888">no recent read</span>'));
+    } else {
+      const r = c.grade==='MARGINAL'?4:3;
+      m=L.circleMarker([c.lat,c.lon],{radius:r,color:COL[c.grade],weight:1,
+        fillColor:COL[c.grade],fillOpacity:c.grade==='MARGINAL'?.7:.4});
+      m.bindPopup(`<b>${c.name}</b><br>${c.area} · ${c.grade.toLowerCase()}`+
+        (c.issue&&c.issue!=='none'?`<br><span style="color:#888">${c.issue.replace(/_/g,' ')}</span>`:''));
+    }
+    m.addTo(layers[c.grade]);
+  });
+  layers.GOOD.addTo(map); layers.MARGINAL.addTo(map);
+
+  const bind=(id,g)=>document.getElementById(id).addEventListener('change',e=>{
+    e.target.checked?layers[g].addTo(map):map.removeLayer(layers[g]);
+  });
+  bind('t-good','GOOD'); bind('t-marg','MARGINAL'); bind('t-bad','BAD');
+
+  // leaderboard
+  live.sort((a,b)=>b.activity-a.activity);
+  const max=10, lb=document.getElementById('leader');
+  document.getElementById('asof').textContent = latest.generated
+    ? 'Last check: '+latest.generated.replace('T',' ')+' · '+live.length+' cameras'
+    : 'awaiting first scheduled check';
+  live.slice(0,12).forEach(c=>{
+    const row=document.createElement('div'); row.className='lb';
+    row.innerHTML=`<span class="v">${c.activity}</span>`+
+      `<span class="bar" style="width:${8+c.activity/max*120}px"></span>`+
+      `<span class="nm" title="${c.name}">${c.name}</span>`;
+    row.style.cursor='pointer';
+    row.onclick=()=>{map.setView([c.lat,c.lon],16);};
+    lb.appendChild(row);
+  });
+});
+
+// rhythm chart from timeline.json (citywide mean activity per hourly capture)
+fetch('data/timeline.json').then(r=>r.ok?r.json():[]).catch(()=>[]).then(pts=>{
+  const cv=document.getElementById('rhythm'), x=cv.getContext('2d');
+  const W=cv.width,H=cv.height,pad=18;
+  x.clearRect(0,0,W,H);
+  x.strokeStyle='#ddd'; x.beginPath(); x.moveTo(pad,H-pad); x.lineTo(W-4,H-pad); x.stroke();
+  x.fillStyle='#6b7178'; x.font='9px sans-serif';
+  [0,5,10].forEach(v=>{const y=H-pad-(v/10)*(H-2*pad); x.fillText(v,2,y+3);});
+  if(pts.length){
+    x.strokeStyle='#d7301f'; x.fillStyle='#d7301f'; x.lineWidth=2; x.beginPath();
+    pts.forEach((p,i)=>{
+      const px=pad+(pts.length===1?(W-pad-4)/2:i/(pts.length-1)*(W-pad-4));
+      const py=H-pad-(p.mean/10)*(H-2*pad);
+      i?x.lineTo(px,py):x.moveTo(px,py);
+      x.fillRect(px-2,py-2,4,4);
+    });
+    if(pts.length>1)x.stroke();
+  }
+});
+
+const now=new Date();
+document.getElementById('clock').textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+</script>
+</body>
+</html>
