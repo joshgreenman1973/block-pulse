@@ -2,7 +2,9 @@
 """Block Pulse: capture the 99 pristine cameras and score street-level activity 0-10.
 Appends one row per camera to data/activity_log.csv. Designed to run hourly."""
 import json, base64, subprocess, urllib.request, concurrent.futures as cf, time, csv, os
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
+NYC = ZoneInfo("America/New_York")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 def _get_key():
@@ -49,7 +51,7 @@ def score(cam):
     return {**base,"activity":"","peds":"","vehicles":"","lit":"","note":"score_failed"}
 
 def main():
-    ts=datetime.now(timezone.utc).astimezone().isoformat(timespec="minutes")
+    ts=datetime.now(NYC).isoformat(timespec="minutes")   # always NYC local time, even on UTC CI runners
     rows=[]
     with cf.ThreadPoolExecutor(max_workers=8) as ex:
         rows=list(ex.map(score,CAMS))
