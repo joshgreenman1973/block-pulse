@@ -3,97 +3,232 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Block Pulse — NYC street-camera coverage & live aliveness</title>
+<title>Block Pulse — vital signs of NYC's watched blocks</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,600&family=Archivo:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  :root{ --ink:#15171a; --muted:#6b7178; --good:#1a9850; --marg:#f4a020; --bad:#b8bcc2; --paper:#faf8f4; }
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink)}
-  #app{display:flex;height:100%}
-  #side{width:340px;flex:0 0 340px;overflow-y:auto;padding:20px 22px;background:var(--paper);border-right:1px solid #e6e2da}
-  #map{flex:1;position:relative}
-  h1{font-size:21px;margin:0 0 2px;letter-spacing:-.3px}
-  .sub{color:var(--muted);font-size:12.5px;margin:0 0 14px;line-height:1.45}
-  .caveat{background:#fff7e6;border:1px solid #f0d28a;border-left:4px solid var(--marg);border-radius:6px;
-          padding:11px 13px;font-size:12px;line-height:1.5;color:#5a4a20;margin:0 0 6px}
-  .caveat b{color:#3d3210}
-  .mapbanner{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:600;
-             background:rgba(21,23,26,.86);color:#fff;font-size:12px;font-weight:500;
-             padding:7px 15px;border-radius:20px;font-family:-apple-system,sans-serif;
-             box-shadow:0 2px 10px rgba(0,0,0,.25);pointer-events:none;white-space:nowrap}
-  .mapbanner b{color:#ffd24d}
-  h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:22px 0 8px;border-bottom:1px solid #e6e2da;padding-bottom:5px}
-  .stat{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
-  .stat b{font-variant-numeric:tabular-nums}
-  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0;cursor:pointer;user-select:none}
-  .sw{width:14px;height:14px;border-radius:50%;flex:0 0 14px;border:1px solid rgba(0,0,0,.25)}
-  .toggle input{margin:0}
-  .leaderboard{font-size:12.5px}
-  .lb{display:flex;align-items:center;gap:8px;padding:3px 0}
-  .lb .bar{height:9px;border-radius:5px;background:linear-gradient(90deg,#f4a020,#d7301f)}
-  .lb .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .lb .v{font-variant-numeric:tabular-nums;font-weight:600;width:18px;text-align:right}
-  .note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:6px}
-  .pill{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:10px;background:#eee;color:#444;margin-left:6px;vertical-align:middle}
-  .leaflet-popup-content{font-size:13px;line-height:1.4}
-  .leaflet-popup-content b{font-size:13.5px}
-  footer{margin-top:24px;font-size:11px;color:var(--muted);line-height:1.5}
+:root{
+  --bg:#090a0c; --panel:#0f1115; --panel2:#13161b;
+  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.045);
+  --ink:#ece9e3; --dim:#8a909b; --faint:#5b616b;
+  --hot:#ff5a36; --warm:#f0a830; --cool:#2f8a93; --signal:#ff5a36;
+  --serif:"Fraunces",Georgia,serif; --ui:"Archivo",sans-serif; --mono:"Spline Sans Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--ui);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* grain */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")}
+#app{display:flex;height:100%}
+
+/* ---------------- sidebar ---------------- */
+#side{width:372px;flex:0 0 372px;overflow-y:auto;background:linear-gradient(180deg,var(--panel),#0b0d10);
+  border-right:1px solid var(--line);position:relative;z-index:5}
+#side::-webkit-scrollbar{width:9px}
+#side::-webkit-scrollbar-thumb{background:#23272e;border:2px solid var(--panel);border-radius:6px}
+.pad{padding:26px 26px 30px}
+.sec{opacity:0;transform:translateY(10px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+.sec:nth-child(1){animation-delay:.02s}.sec:nth-child(2){animation-delay:.10s}
+.sec:nth-child(3){animation-delay:.18s}.sec:nth-child(4){animation-delay:.26s}
+.sec:nth-child(5){animation-delay:.34s}.sec:nth-child(6){animation-delay:.42s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* header */
+.brand{display:flex;align-items:center;gap:11px}
+.ekg{width:34px;height:34px;flex:0 0 34px}
+.ekg path{stroke:var(--hot);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:120;stroke-dashoffset:120;animation:trace 2.6s ease-in-out infinite}
+@keyframes trace{0%{stroke-dashoffset:120}55%{stroke-dashoffset:0}100%{stroke-dashoffset:-120}}
+.wordmark{font-family:var(--ui);font-weight:700;font-stretch:125%;letter-spacing:.14em;font-size:18px;line-height:1}
+.wordmark small{display:block;font-family:var(--mono);font-weight:400;font-stretch:normal;letter-spacing:.32em;
+  font-size:9px;color:var(--faint);margin-top:6px}
+.tagline{font-family:var(--serif);font-optical-sizing:auto;font-size:16.5px;line-height:1.42;color:#c9c5bd;
+  margin:20px 0 0;font-weight:400}
+.tagline em{font-style:italic;color:var(--ink)}
+
+/* status row */
+.status{display:flex;align-items:center;gap:8px;margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 0 rgba(255,90,54,.6);
+  animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,90,54,.55)}70%{box-shadow:0 0 0 7px rgba(255,90,54,0)}100%{box-shadow:0 0 0 0 rgba(255,90,54,0)}}
+
+/* section heads */
+.h{display:flex;align-items:baseline;gap:9px;margin:30px 0 14px;font-family:var(--mono);
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.h i{color:var(--hot);font-style:normal;font-size:9px}
+.h::after{content:"";flex:1;height:1px;background:var(--line);align-self:center}
+
+/* coverage stats */
+.cov{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.cell{background:var(--panel2);padding:13px 13px 12px}
+.cell .n{font-family:var(--serif);font-optical-sizing:auto;font-size:30px;line-height:.95;font-weight:500}
+.cell.g .n{color:#5cc98a}.cell.m .n{color:var(--warm)}.cell.b .n{color:var(--faint)}
+.cell .l{font-family:var(--mono);font-size:9px;letter-spacing:.04em;color:var(--dim);margin-top:7px;line-height:1.35}
+
+/* heat scale legend */
+.heat{height:9px;border-radius:5px;margin:2px 0 6px;
+  background:linear-gradient(90deg,#2f8a93,#5fae7a,#e0a830,#ff5a36)}
+.heatlab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--faint)}
+
+/* toggles */
+.tog{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:13px;color:#cbc8c1;cursor:pointer;user-select:none}
+.tog input{position:absolute;opacity:0}
+.box{width:15px;height:15px;border-radius:4px;border:1px solid var(--line);flex:0 0 15px;display:grid;place-items:center;transition:.15s}
+.tog input:checked + .box{border-color:transparent}
+.tog .box svg{opacity:0;transition:.15s}.tog input:checked + .box svg{opacity:1}
+.swdot{width:9px;height:9px;border-radius:50%}
+.tog .meta{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--faint)}
+
+/* leaderboard */
+.lb{display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:11px;padding:7px 0;
+  border-bottom:1px solid var(--line2);cursor:pointer;transition:.15s}
+.lb:hover{background:rgba(255,255,255,.025);padding-left:6px;padding-right:6px;margin:0 -6px;border-radius:6px}
+.lb .rk{font-family:var(--mono);font-size:10px;color:var(--faint);text-align:right}
+.lb .nm{font-size:12.5px;color:#d8d4cc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb .nm .ar{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-left:6px}
+.lb .rt{display:flex;align-items:center;gap:9px;justify-self:end}
+.lb .bar{height:5px;border-radius:3px;width:62px;background:rgba(255,255,255,.06);overflow:hidden}
+.lb .bar i{display:block;height:100%;border-radius:3px}
+.lb .v{font-family:var(--serif);font-optical-sizing:auto;font-size:17px;font-weight:500;width:22px;text-align:right}
+
+/* rhythm */
+#rhythm{width:100%;height:128px;display:block;margin-top:2px}
+.readout{font-family:var(--mono);font-size:10.5px;color:var(--dim);margin-top:9px;display:flex;justify-content:space-between}
+.readout b{color:var(--ink);font-weight:500}
+
+/* note */
+.note{position:relative;border-left:2px solid var(--line);padding:2px 0 2px 15px;margin-top:6px;
+  font-size:12px;line-height:1.6;color:var(--dim)}
+.note .tag{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--hot);display:block;margin-bottom:6px}
+.note b{color:#cbc8c1;font-weight:600}
+
+footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:9.5px;line-height:1.7;color:var(--faint)}
+footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line)}
+
+/* ---------------- map ---------------- */
+#map{flex:1;position:relative;background:#090a0c}
+.leaflet-container{background:#090a0c;font-family:var(--mono)}
+.leaflet-control-zoom{border:1px solid var(--line)!important;box-shadow:none!important;overflow:hidden;border-radius:8px!important}
+.leaflet-control-zoom a{background:#13161b!important;color:#cbc8c1!important;border-bottom:1px solid var(--line)!important}
+.leaflet-control-zoom a:hover{background:#1c2027!important;color:#fff!important}
+.leaflet-control-attribution{background:rgba(9,10,12,.7)!important;color:#5b616b!important;font-size:9px!important}
+.leaflet-control-attribution a{color:#8a909b!important}
+.leaflet-popup-content-wrapper{background:#13161b;color:var(--ink);border:1px solid var(--line);
+  border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.leaflet-popup-tip{background:#13161b;border:1px solid var(--line)}
+.leaflet-popup-content{margin:13px 15px;font-family:var(--ui);font-size:12.5px;line-height:1.5}
+.pop-nm{font-family:var(--ui);font-weight:700;font-size:13px;letter-spacing:.01em}
+.pop-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+.pop-act{font-family:var(--serif);font-size:26px;font-weight:500;margin-top:9px;line-height:1}
+.pop-sub{font-family:var(--mono);font-size:10px;color:var(--dim);margin-top:2px}
+.pop-bad{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:6px}
+
+.banner{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:600;
+  background:rgba(13,16,21,.82);backdrop-filter:blur(8px);border:1px solid var(--line);
+  border-radius:30px;padding:9px 18px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;
+  color:var(--dim);white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none}
+.banner b{color:var(--warm);font-weight:500}
+.legend{position:absolute;right:14px;top:14px;z-index:600;background:rgba(13,16,21,.82);backdrop-filter:blur(8px);
+  border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:10px;color:var(--dim)}
+.legend .row{display:flex;align-items:center;gap:8px;padding:2px 0}
+.legend .d{width:9px;height:9px;border-radius:50%}
+.legend .ttl{color:var(--faint);letter-spacing:.18em;font-size:8.5px;margin-bottom:6px}
+
+@media(max-width:780px){#app{flex-direction:column}#side{width:100%;flex:none;max-height:50vh}#map{min-height:50vh}}
 </style>
 </head>
 <body>
 <div id="app">
-  <div id="side">
-    <h1>Block Pulse <span class="pill" id="clock">live</span></h1>
-    <p class="sub">Every NYC DOT street camera, graded for whether it can see sidewalk life — and a live read of how alive each block is, scored by a vision model.</p>
+  <aside id="side"><div class="pad">
 
-    <div class="caveat">
-      <b>This watches a sliver of the city.</b>
-      NYC DOT runs ~960 cameras to manage <i>traffic</i>, not street life. They cover roughly <b>1% of the city's ~6,300 street-miles</b> and about <b>7% of signalized intersections</b> — clustered on arterials and bridges. Of the 744 on neighborhood streets, only <b>390 (≈40%)</b> can actually see a sidewalk, and <b>87 of the 99 best are in Manhattan</b>. The Bronx and Staten Island are almost all highway — effectively unwatched here.
+    <div class="sec">
+      <div class="brand">
+        <svg class="ekg" viewBox="0 0 40 40"><path d="M2 22 L10 22 L14 22 L17 8 L22 32 L26 18 L30 22 L38 22"/></svg>
+        <div class="wordmark">BLOCK PULSE<small>NYC · LIVE STREET VITALS</small></div>
+      </div>
+      <p class="tagline">How alive is a block, hour by hour — read off the city's own cameras by a vision model that <em>counts the street</em>.</p>
+      <div class="status"><span class="dot-live"></span><span id="status">initializing feed…</span></div>
     </div>
 
-    <h2>Coverage of the 744 street cameras</h2>
-    <div class="stat"><span>Pristine (clear sidewalk life)</span><b id="s-good">99</b></div>
-    <div class="stat"><span>Usable with care</span><b id="s-marg">291</b></div>
-    <div class="stat"><span>Not usable (highway/wide/fouled)</span><b id="s-bad">354</b></div>
+    <div class="sec">
+      <div class="h"><i>01</i> Coverage of watched streets</div>
+      <div class="cov">
+        <div class="cell g"><div class="n" id="s-good">99</div><div class="l">PRISTINE<br>clear sidewalk</div></div>
+        <div class="cell m"><div class="n" id="s-marg">291</div><div class="l">USABLE<br>with care</div></div>
+        <div class="cell b"><div class="n" id="s-bad">354</div><div class="l">REJECTED<br>no sidewalk</div></div>
+      </div>
+    </div>
 
-    <h2>Show on map</h2>
-    <label class="toggle"><input type="checkbox" id="t-good" checked><span class="sw" style="background:var(--good)"></span>Pristine — sized by live activity</label>
-    <label class="toggle"><input type="checkbox" id="t-marg" checked><span class="sw" style="background:var(--marg)"></span>Usable with care</label>
-    <label class="toggle"><input type="checkbox" id="t-bad"><span class="sw" style="background:var(--bad)"></span>Rejected (shows the dead zones)</label>
+    <div class="sec">
+      <div class="h"><i>02</i> Live activity layers</div>
+      <div class="heat"></div>
+      <div class="heatlab"><span>0 · dead</span><span>5 · steady</span><span>10 · packed</span></div>
+      <label class="tog"><input type="checkbox" id="t-good" checked><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#5cc98a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pristine — heat = live activity<span class="meta">99</span></label>
+      <label class="tog"><input type="checkbox" id="t-marg" checked><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#f0a830" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Usable with care<span class="meta">291</span></label>
+      <label class="tog"><input type="checkbox" id="t-bad"><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#8a909b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rejected — reveals dead zones<span class="meta">354</span></label>
+    </div>
 
-    <h2>Most alive right now</h2>
-    <div class="leaderboard" id="leader"></div>
-    <div class="note" id="asof"></div>
+    <div class="sec">
+      <div class="h"><i>03</i> Most alive right now</div>
+      <div id="leader"></div>
+      <div class="readout"><span id="asof">—</span><span id="meanout"></span></div>
+    </div>
 
-    <h2>Rhythm by hour</h2>
-    <canvas id="rhythm" width="300" height="120" style="width:100%;height:120px"></canvas>
-    <div class="note" id="rnote">Captures accumulate hourly into <code>data/activity_log.csv</code>. With one reading so far this shows a single point — the curve fills in over the next day once the scheduler runs.</div>
+    <div class="sec">
+      <div class="h"><i>04</i> Pulse by hour</div>
+      <canvas id="rhythm"></canvas>
+      <div class="note"><span class="tag">CALIBRATING</span><span id="rnote">Captured hourly on GitHub's servers. The trace fills into a full daily curve over the next day.</span></div>
+    </div>
 
-    <footer>
-      Source: NYC DOT traffic cameras (webcams.nyctmc.org), graded + scored by Claude Haiku.
-      352×240 frames — aggregate activity only, no individuals identifiable. Coverage skews to Manhattan; Bronx & Staten Island are largely highway and absent.
-    </footer>
-  </div>
+    <div class="sec">
+      <div class="h"><i>05</i> Read this first</div>
+      <div class="note"><span class="tag">SAMPLE BIAS</span>These are <b>traffic</b> cameras, not street cameras. They see ~<b>1% of NYC's 6,300 street-miles</b> and ~7% of signals — clustered in Manhattan, which holds <b>87 of the 99 best</b>. The Bronx &amp; Staten Island are mostly highway and effectively unwatched. Read this as the pulse of <b>the blocks the city happens to watch</b>, not of New York.</div>
+      <footer>
+        Source · NYC DOT traffic cameras (webcams.nyctmc.org)<br>
+        Graded &amp; scored by Claude Haiku · 352×240 frames, aggregate only — no individuals identifiable<br>
+        <a href="https://github.com/joshgreenman1973/block-pulse" target="_blank">github.com/joshgreenman1973/block-pulse</a>
+      </footer>
+    </div>
+
+  </div></aside>
+
   <div id="map">
-    <div class="mapbanner">These cameras see ~<b>1% of NYC streets</b> — and most can't see a sidewalk at all</div>
+    <div class="legend">
+      <div class="ttl">SIGNAL</div>
+      <div class="row"><span class="d" style="background:#ff5a36;box-shadow:0 0 8px #ff5a36"></span>high activity</div>
+      <div class="row"><span class="d" style="background:#e0a830"></span>steady</div>
+      <div class="row"><span class="d" style="background:#2f8a93"></span>quiet</div>
+      <div class="row"><span class="d" style="background:#3a3f47"></span>not watchable</div>
+    </div>
+    <div class="banner">CAMERAS SEE ~<b>1% OF NYC STREETS</b> — MOST CAN'T SEE A SIDEWALK</div>
   </div>
 </div>
 
 <script>
-const map = L.map('map',{zoomControl:true}).setView([40.735,-73.96],12);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+const map=L.map('map',{zoomControl:true,attributionControl:true,preferCanvas:true}).setView([40.728,-73.97],12);
+L.control.zoom({position:'topleft'});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
   {attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+const renderer=L.canvas({padding:.5});
 
-const COL={GOOD:'#1a9850',MARGINAL:'#f4a020',BAD:'#b8bcc2'};
-const layers={GOOD:L.layerGroup(),MARGINAL:L.layerGroup(),BAD:L.layerGroup()};
-
-function activityColor(a){ // 0..10 -> amber to deep red
-  if(a==null) return '#1a9850';
-  const t=Math.max(0,Math.min(1,a/10));
-  const r=Math.round(244+(215-244)*t), g=Math.round(160+(48-160)*t), b=Math.round(32+(31-32)*t);
-  return `rgb(${r},${g},${b})`;
+// heat ramp 0..10 : teal -> green -> amber -> coral
+function heat(a){
+  const stops=[[0,[47,138,147]],[4,[95,174,122]],[6,[224,168,48]],[8,[255,120,60]],[10,[255,90,54]]];
+  a=Math.max(0,Math.min(10,a));
+  for(let i=1;i<stops.length;i++){if(a<=stops[i][0]){
+    const [x0,c0]=stops[i-1],[x1,c1]=stops[i],t=(a-x0)/(x1-x0);
+    return `rgb(${c0.map((v,k)=>Math.round(v+(c1[k]-v)*t)).join(',')})`;}}
+  return 'rgb(255,90,54)';
 }
+const COL={MARGINAL:'#6b5a2a',BAD:'#3a3f47'};
+
+const layers={GOOD:L.layerGroup(),MARGINAL:L.layerGroup(),BAD:L.layerGroup()};
 
 Promise.all([
   fetch('data/cameras.json').then(r=>r.json()),
@@ -102,72 +237,92 @@ Promise.all([
   const live=[];
   cams.forEach(c=>{
     const rec=latest.scores[c.id];
-    c.activity = rec?rec.activity:null;        // most-recent read, not the baked snapshot
-    c.peds = rec?rec.peds:null;
+    c.activity=rec?rec.activity:null; c.peds=rec?rec.peds:null;
     if(c.activity!=null) live.push(c);
-    let m;
     if(c.grade==='GOOD'){
-      const a=c.activity;
-      const radius = a==null?5 : 4+a*1.3;
-      m=L.circleMarker([c.lat,c.lon],{radius,color:'#0b6b34',weight:1,
-        fillColor:activityColor(a),fillOpacity:.9});
-      m.bindPopup(`<b>${c.name}</b><br>${c.area} · pristine`+
-        (a!=null?`<br><b>Activity (last check): ${a}/10</b> (~${c.peds} pedestrians)`:'<br><span style="color:#888">no recent read</span>'));
+      const a=c.activity, col=a!=null?heat(a):'#3f5d4a';
+      if(a!=null && a>=7){ // glow halo for hot blocks
+        L.circleMarker([c.lat,c.lon],{renderer,radius:9+a*1.4,stroke:false,fillColor:col,fillOpacity:.16}).addTo(layers.GOOD);
+      }
+      const core=L.circleMarker([c.lat,c.lon],{renderer,radius:a!=null?3.5+a*0.85:4,
+        color:col,weight:1.1,opacity:.85,fillColor:col,fillOpacity:.92});
+      core.bindPopup(`<div class="pop-nm">${c.name}</div><div class="pop-meta">${c.area} · pristine</div>`+
+        (a!=null?`<div class="pop-act" style="color:${col}">${a}<span style="font-size:13px;color:#8a909b">/10</span></div><div class="pop-sub">~${c.peds} pedestrians · last check</div>`
+                :`<div class="pop-bad">no recent read</div>`));
+      core.addTo(layers.GOOD);
     } else {
-      const r = c.grade==='MARGINAL'?4:3;
-      m=L.circleMarker([c.lat,c.lon],{radius:r,color:COL[c.grade],weight:1,
-        fillColor:COL[c.grade],fillOpacity:c.grade==='MARGINAL'?.7:.4});
-      m.bindPopup(`<b>${c.name}</b><br>${c.area} · ${c.grade.toLowerCase()}`+
-        (c.issue&&c.issue!=='none'?`<br><span style="color:#888">${c.issue.replace(/_/g,' ')}</span>`:''));
+      const r=c.grade==='MARGINAL'?3:2.3;
+      const m=L.circleMarker([c.lat,c.lon],{renderer,radius:r,stroke:false,
+        fillColor:COL[c.grade],fillOpacity:c.grade==='MARGINAL'?.7:.5});
+      m.bindPopup(`<div class="pop-nm">${c.name}</div><div class="pop-meta">${c.area} · ${c.grade.toLowerCase()}</div>`+
+        (c.issue&&c.issue!=='none'?`<div class="pop-bad">${c.issue.replace(/_/g,' ')}</div>`:''));
+      m.addTo(layers[c.grade]);
     }
-    m.addTo(layers[c.grade]);
   });
   layers.GOOD.addTo(map); layers.MARGINAL.addTo(map);
-
   const bind=(id,g)=>document.getElementById(id).addEventListener('change',e=>{
-    e.target.checked?layers[g].addTo(map):map.removeLayer(layers[g]);
-  });
-  bind('t-good','GOOD'); bind('t-marg','MARGINAL'); bind('t-bad','BAD');
+    e.target.checked?layers[g].addTo(map):map.removeLayer(layers[g]);});
+  bind('t-good','GOOD');bind('t-marg','MARGINAL');bind('t-bad','BAD');
 
   // leaderboard
   live.sort((a,b)=>b.activity-a.activity);
-  const max=10, lb=document.getElementById('leader');
-  document.getElementById('asof').textContent = latest.generated
-    ? 'Last check: '+latest.generated.replace('T',' ')+' · '+live.length+' cameras'
-    : 'awaiting first scheduled check';
-  live.slice(0,12).forEach(c=>{
-    const row=document.createElement('div'); row.className='lb';
-    row.innerHTML=`<span class="v">${c.activity}</span>`+
-      `<span class="bar" style="width:${8+c.activity/max*120}px"></span>`+
-      `<span class="nm" title="${c.name}">${c.name}</span>`;
-    row.style.cursor='pointer';
-    row.onclick=()=>{map.setView([c.lat,c.lon],16);};
+  const lb=document.getElementById('leader');
+  live.slice(0,10).forEach((c,i)=>{
+    const col=heat(c.activity), short=c.name.replace(/\s*-\s*(quad|ptz|PTZ).*$/i,'');
+    const row=document.createElement('div');row.className='lb';
+    row.innerHTML=`<span class="rk">${String(i+1).padStart(2,'0')}</span>`+
+      `<span class="nm">${short}<span class="ar">${c.area.slice(0,4).toUpperCase()}</span></span>`+
+      `<span class="rt"><span class="bar"><i style="width:${c.activity*10}%;background:${col}"></i></span>`+
+      `<span class="v" style="color:${col}">${c.activity}</span></span>`;
+    row.onclick=()=>{map.flyTo([c.lat,c.lon],16,{duration:.8}); map.openPopup;};
     lb.appendChild(row);
   });
+  document.getElementById('status').textContent = latest.generated
+    ? 'last check '+fmt(latest.generated) : 'awaiting first scheduled check';
+  document.getElementById('asof').textContent = latest.generated?('LAST CHECK '+fmt(latest.generated)):'—';
 });
 
-// rhythm chart from timeline.json (citywide mean activity per hourly capture)
+function fmt(iso){ // 2026-06-05T17:18-04:00 -> "Jun 5 · 5:18 PM"
+  try{const d=new Date(iso);return d.toLocaleString('en-US',{month:'short',day:'numeric'})+' · '+
+    d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}catch(e){return iso;}
+}
+
+// ---- rhythm trace ----
 fetch('data/timeline.json').then(r=>r.ok?r.json():[]).catch(()=>[]).then(pts=>{
-  const cv=document.getElementById('rhythm'), x=cv.getContext('2d');
-  const W=cv.width,H=cv.height,pad=18;
+  const cv=document.getElementById('rhythm'),x=cv.getContext('2d');
+  const DPR=Math.min(2,window.devicePixelRatio||1);
+  const W=cv.clientWidth||320,H=128; cv.width=W*DPR;cv.height=H*DPR;x.scale(DPR,DPR);
+  const padL=22,padB=18,padT=10,padR=6, iw=W-padL-padR, ih=H-padT-padB;
+  const Y=v=>padT+ih-(v/10)*ih;
   x.clearRect(0,0,W,H);
-  x.strokeStyle='#ddd'; x.beginPath(); x.moveTo(pad,H-pad); x.lineTo(W-4,H-pad); x.stroke();
-  x.fillStyle='#6b7178'; x.font='9px sans-serif';
-  [0,5,10].forEach(v=>{const y=H-pad-(v/10)*(H-2*pad); x.fillText(v,2,y+3);});
-  if(pts.length){
-    x.strokeStyle='#d7301f'; x.fillStyle='#d7301f'; x.lineWidth=2; x.beginPath();
-    pts.forEach((p,i)=>{
-      const px=pad+(pts.length===1?(W-pad-4)/2:i/(pts.length-1)*(W-pad-4));
-      const py=H-pad-(p.mean/10)*(H-2*pad);
-      i?x.lineTo(px,py):x.moveTo(px,py);
-      x.fillRect(px-2,py-2,4,4);
-    });
-    if(pts.length>1)x.stroke();
-  }
+  // gridlines
+  x.font='9px "Spline Sans Mono"';x.textBaseline='middle';
+  [0,5,10].forEach(v=>{const y=Y(v);
+    x.strokeStyle='rgba(255,255,255,.06)';x.beginPath();x.moveTo(padL,y);x.lineTo(W-padR,y);x.stroke();
+    x.fillStyle='#5b616b';x.textAlign='right';x.fillText(v,padL-6,y);});
+  const mean=pts.length?pts.reduce((s,p)=>s+p.mean,0)/pts.length:0;
+  document.getElementById('meanout').textContent = pts.length?('MEAN '+mean.toFixed(1)):'';
+  if(!pts.length){x.fillStyle='#5b616b';x.textAlign='center';x.fillText('collecting…',W/2,H/2);return;}
+  const X=i=>padL+(pts.length===1?iw/2:i/(pts.length-1)*iw);
+  // area fill
+  const grad=x.createLinearGradient(0,padT,0,padT+ih);
+  grad.addColorStop(0,'rgba(255,90,54,.30)');grad.addColorStop(1,'rgba(255,90,54,0)');
+  x.beginPath();x.moveTo(X(0),padT+ih);
+  pts.forEach((p,i)=>x.lineTo(X(i),Y(p.mean)));
+  x.lineTo(X(pts.length-1),padT+ih);x.closePath();x.fillStyle=grad;x.fill();
+  // line
+  x.beginPath();pts.forEach((p,i)=>{const fx=X(i),fy=Y(p.mean);i?x.lineTo(fx,fy):x.moveTo(fx,fy);});
+  x.strokeStyle='#ff5a36';x.lineWidth=1.6;x.lineJoin='round';x.stroke();
+  // points + glowing latest
+  pts.forEach((p,i)=>{const fx=X(i),fy=Y(p.mean),last=i===pts.length-1;
+    if(last){x.shadowColor='#ff5a36';x.shadowBlur=10;}
+    x.fillStyle=last?'#ff5a36':'#caa';x.beginPath();x.arc(fx,fy,last?3.2:2,0,7);x.fill();x.shadowBlur=0;});
+  // x label: first & last time
+  x.fillStyle='#5b616b';x.textBaseline='alphabetic';
+  const hr=iso=>{try{return new Date(iso).toLocaleTimeString('en-US',{hour:'numeric'}).replace(' ','').toLowerCase();}catch(e){return'';}};
+  x.textAlign='left';x.fillText(hr(pts[0].ts),padL,H-5);
+  if(pts.length>1){x.textAlign='right';x.fillText(hr(pts[pts.length-1].ts),W-padR,H-5);}
 });
-
-const now=new Date();
-document.getElementById('clock').textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
 </script>
 </body>
 </html>
