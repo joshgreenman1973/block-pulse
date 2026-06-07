@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Block Pulse: capture the 99 pristine cameras and score street-level activity 0-10.
 Appends one row per camera to data/activity_log.csv. Designed to run hourly."""
-import json, base64, subprocess, urllib.request, concurrent.futures as cf, time, csv, os
+import json, base64, subprocess, urllib.request, concurrent.futures as cf, time, csv, os, sys
 from datetime import datetime
 from zoneinfo import ZoneInfo
 NYC = ZoneInfo("America/New_York")
@@ -67,6 +67,18 @@ def main():
     rows=[]
     with cf.ThreadPoolExecutor(max_workers=8) as ex:
         rows=list(ex.map(score,CAMS))
+    scored=[r for r in rows if str(r.get("activity","")).strip()!=""]
+
+    # FAIL LOUDLY: if nothing scored, do NOT write empty data over the good data — exit non-zero
+    # so the GitHub Action goes red and emails instead of showing a misleading green check.
+    if not scored:
+        sys.stderr.write(f"{ts}  CAPTURE FAILED: scored 0/{len(rows)} cameras. "
+                         f"Likely out of Anthropic API credits, or the camera feed is down. "
+                         f"Not writing empty data.\n")
+        sys.exit(1)
+    if len(scored) < len(rows)*0.5:   # degraded but not dead — warn, keep going
+        sys.stderr.write(f"{ts}  WARNING: only scored {len(scored)}/{len(rows)} cameras (degraded).\n")
+
     new=not os.path.exists(LOG)
     with open(LOG,"a",newline="") as f:
         w=csv.writer(f)
@@ -74,7 +86,6 @@ def main():
         for r in rows:
             w.writerow([ts,r["id"],r["name"],r["area"],r["lat"],r["lon"],
                         r.get("activity",""),r.get("peds",""),r.get("vehicles",""),r.get("lit",""),r.get("note","")])
-    scored=[r for r in rows if str(r.get("activity","")).strip()!=""]
 
     # latest.json: most-recent read per camera, for the map dots + leaderboard
     latest={"generated":ts,"scores":{}}
