@@ -55,6 +55,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;o
 .dot-live{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 0 rgba(255,90,54,.6);
   animation:pulse 1.8s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,90,54,.55)}70%{box-shadow:0 0 0 7px rgba(255,90,54,0)}100%{box-shadow:0 0 0 0 rgba(255,90,54,0)}}
+.dot-live.paused-dot{background:#787e88;animation:none;box-shadow:none}
+.paused{border:1px solid rgba(240,168,48,.32);background:rgba(240,168,48,.055);border-radius:9px;
+  padding:12px 14px;margin:18px 0 0;font-size:12px;line-height:1.55;color:#c9b889}
+.paused .tag{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--warm);margin-bottom:7px}
+.paused b{color:#ece9e3;font-weight:600}
 
 /* section heads */
 .h{display:flex;align-items:baseline;gap:9px;margin:30px 0 14px;font-family:var(--mono);
@@ -163,10 +168,15 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
     <div class="sec">
       <div class="brand">
         <svg class="ekg" viewBox="0 0 40 40"><path d="M2 22 L10 22 L14 22 L17 8 L22 32 L26 18 L30 22 L38 22"/></svg>
-        <div class="wordmark">BLOCK PULSE<small>NYC · LIVE STREET VITALS</small></div>
+        <div class="wordmark">BLOCK PULSE<small>NYC · STREET VITALS</small></div>
       </div>
       <p class="tagline">How busy is a block on foot, hour by hour — a vision model <em>counts the pedestrians</em> on the city's own cameras. Vehicles don't count.</p>
-      <div class="status"><span class="dot-live"></span><span id="status">initializing feed…</span></div>
+      <div class="status"><span class="dot-live" id="statusdot"></span><span id="status">initializing feed…</span></div>
+      <div class="paused" id="paused" hidden>
+        <span class="tag">▮▮ SCORING PAUSED</span>
+        AI foot-traffic scoring is <b>frozen</b> at the snapshot below (<span id="frozenwhen">—</span>). The hourly capture was switched off to avoid ongoing API cost, so the scores and the rhythm curve no longer update.
+        <br><br><b>The camera feeds are still live</b> — click any dot to see that camera's current frame.
+      </div>
     </div>
 
     <div class="sec">
@@ -179,7 +189,7 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
     </div>
 
     <div class="sec">
-      <div class="h"><i>02</i> Live foot traffic</div>
+      <div class="h"><i>02</i> Foot traffic layers</div>
       <div class="heat"></div>
       <div class="heatlab"><span>0 · empty</span><span>5 · steady flow</span><span>10 · packed</span></div>
       <label class="tog"><input type="checkbox" id="t-good" checked><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#5cc98a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pristine — heat = foot traffic<span class="meta">99</span></label>
@@ -188,7 +198,7 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
     </div>
 
     <div class="sec">
-      <div class="h"><i>03</i> Busiest on foot right now</div>
+      <div class="h"><i>03</i> Busiest on foot</div>
       <div id="leader"></div>
       <div class="readout"><span id="asof">—</span><span id="meanout"></span></div>
     </div>
@@ -196,7 +206,7 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
     <div class="sec">
       <div class="h"><i>04</i> Foot traffic by hour</div>
       <canvas id="rhythm"></canvas>
-      <div class="note"><span class="tag">CALIBRATING</span><span id="rnote">Captured hourly on GitHub's servers. The trace fills into a full daily curve over the next day.</span></div>
+      <div class="note"><span class="tag">HOURLY MEAN</span><span id="rnote">Citywide mean foot traffic per hourly capture — a frozen record of roughly two days, ending at the last capture before scoring was paused.</span></div>
     </div>
 
     <div class="sec">
@@ -306,9 +316,20 @@ Promise.all([
     row.onclick=()=>{map.flyTo([c.lat,c.lon],16,{duration:.8}); map.openPopup;};
     lb.appendChild(row);
   });
-  document.getElementById('status').textContent = latest.generated
-    ? 'last check '+fmt(latest.generated) : 'awaiting first scheduled check';
-  document.getElementById('asof').textContent = latest.generated?('LAST CHECK '+fmt(latest.generated)):'—';
+  // staleness: if the last capture is >2h old, scoring is paused — say so plainly
+  const ageH = latest.generated ? (Date.now()-new Date(latest.generated).getTime())/3.6e6 : Infinity;
+  const stale = ageH > 2;
+  const st=document.getElementById('status'), dot=document.getElementById('statusdot');
+  if(!latest.generated){ st.textContent='awaiting first scheduled check'; }
+  else if(stale){
+    st.textContent='scoring paused · frozen '+fmt(latest.generated);
+    dot.classList.add('paused-dot');
+    const p=document.getElementById('paused'); p.hidden=false;
+    document.getElementById('frozenwhen').textContent=fmt(latest.generated);
+  } else {
+    st.textContent='live · last check '+fmt(latest.generated);
+  }
+  document.getElementById('asof').textContent = latest.generated?((stale?'FROZEN ':'LAST CHECK ')+fmt(latest.generated)):'—';
 });
 
 function fmt(iso){ // 2026-06-05T17:18-04:00 -> "Jun 5 · 5:18 PM"
