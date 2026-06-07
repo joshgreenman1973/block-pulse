@@ -2870,3 +2870,102 @@ ts,id,name,area,lat,lon,activity,peds,vehicles,lit,note
 2026-06-07T01:42-04:00,fc7db899-7a79-41f3-b9b1-b23ce64c5a5e,7 Ave @ 49 St,Manhattan,40.7604823513464,-73.983738054794,3,8,12,night,"Sparse foot traffic, late night"
 2026-06-07T01:42-04:00,f2964d50-042c-4021-8b52-992c08c6ff6f,8 Ave @ 34 St,Manhattan,40.7521973661027,-73.9934562042021,2,3,3,night,"Late night, minimal pedestrian activity"
 2026-06-07T01:42-04:00,f0b924fe-0df6-4ac2-85a2-5d2b96d081d5,7 Ave @ 57 St,Manhattan,40.765534775125,-73.9800400250842,2,3,5,night,"Minimal pedestrian activity, sparse late night"
+2026-06-07T03:38-04:00,ec9eda79-e250-4e6f-a8f6-e51021fb054f,Amsterdam Ave @ 60 St,Manhattan,40.771057,-73.987139,4,12,3,night,"Moderate late-night activity, some clusters"
+2026-06-07T03:38-04:00,053e8995-f8cb-4d02-a659-70ac7c7da5db,Broadway @ 45 St,Manhattan,40.757953,-73.98549,2,8,12,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,09b1235e-d2d1-4451-83a5-5a1c3ec280aa,St Nicholas Ave @ 145 St,Manhattan,40.824031,-73.94477,2,1,2,night,Very quiet early morning street
+2026-06-07T03:38-04:00,ec9ffb62-e3bf-4352-8bcf-7c9adf5fbe9c,8th Ave @ 31st St,Manhattan,40.750297,-73.99483,3,8,5,night,"Late night, sparse pedestrian traffic"
+2026-06-07T03:38-04:00,f06979b2-3497-4330-9882-a06c8a442b7c,6 Ave @ 34 St,Manhattan,40.749808,-73.987746,2,3,8,night,"Early morning, mostly empty streets"
+2026-06-07T03:38-04:00,e229e0fd-559b-4c1e-bcba-ac23db1d01e3,6 Ave @ 57 St,Manhattan,40.7643348872061,-73.9772018595711,2,1,3,night,Very quiet early morning street
+2026-06-07T03:38-04:00,6d3a21dd-0434-4d92-a0d1-3ca8b77297db,5 Ave @ E 58 St,Manhattan,40.763753,-73.973548,2,3,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,23bcc0dd-d395-45fe-8106-676ba7293208,Varick St @ Watt St,Manhattan,40.72379,-74.006138,7,45,12,night,"Busy evening foot traffic, vibrant"
+2026-06-07T03:38-04:00,08328372-55a2-448a-b180-9b4bce0b8d9e,Broadway @ Morris St,Manhattan,40.70589,-74.0133,2,3,4,night,Very quiet early morning street
+2026-06-07T03:38-04:00,83655dbc-7902-4fdb-926c-15fee4396b83,Broadway @ 38 St,Manhattan,40.752453,-73.987123,2,3,0,night,"Late night, minimal foot traffic"
+2026-06-07T03:38-04:00,5d055599-875a-4010-991f-e7e454889052,7 Ave @ 40 St,Manhattan,40.754746,-73.987894,3,8,4,night,"Late night, sparse pedestrian activity"
+2026-06-07T03:38-04:00,9c4c2657-6796-4953-bbe6-c50f24bb5820,5 Ave @ 57 St,Manhattan,40.7629820055328,-73.9739858644822,3,8,4,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,9955d671-39ad-4fb7-b63e-4e78cf6ac157,Flatbush Ave and 4 Ave,Brooklyn,40.6838924508798,-73.9779424667358,2,1,3,night,Very quiet early morning hour
+2026-06-07T03:38-04:00,156b0613-239a-4e77-aa0e-0a4becfc0b05,Lenox Ave @ 125 St,Manhattan,40.80798,-73.945472,2,3,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,8f692f55-8118-423b-8bcb-1ea49eaf442b,2 Ave @ 42 St,Manhattan,40.7498342023994,-73.9722170340956,2,0,3,night,Very quiet early morning street
+2026-06-07T03:38-04:00,74915f83-bee1-46f3-be10-24e121eda081,Lexington Ave @ E 125 St,Manhattan,40.80451,-73.937495,2,3,0,night,"Early morning, minimal pedestrian presence"
+2026-06-07T03:38-04:00,65440c6b-ee6c-4406-8542-2992b6edf3f5,Lexington Ave @ 72 St,Manhattan,40.770429,-73.962214,1,0,3,night,"Empty street, late night, minimal activity"
+2026-06-07T03:38-04:00,5c505897-b475-4359-897d-b064bdb9feef,8 AVE @ 44 St,Manhattan,40.75851,-73.9888,2,3,8,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,4bd443cf-374f-493b-a99e-5f7ef81bb62c,3 Ave @ E 88 St,Manhattan,40.780144,-73.953037,4,8,6,night,"Moderate nighttime foot traffic, open storefronts"
+2026-06-07T03:38-04:00,1927b469-e2dc-4943-a70c-e6e52fd4c48c,Broadway @ 46 St- Quad South,Manhattan,40.758692,-73.985371,4,12,1,night,Sparse early morning foot traffic
+2026-06-07T03:38-04:00,dce301aa-b937-4041-b9fc-960abcd79178,Varick St @ Laight St,Manhattan,40.721808,-74.006436,4,12,8,night,"Moderate foot traffic, evening commercial district"
+2026-06-07T03:38-04:00,9565e94d-66f2-4965-9c13-82d5500d6cfd,Broadway @ 42 St,Manhattan,40.7558094297322,-73.9864124090652,2,3,2,night,Very quiet early morning street
+2026-06-07T03:38-04:00,e38fd7b8-c074-4b6e-bc52-4dd932145239,Rockefeller Plaza @ W 50 St,Manhattan,40.75907,-73.97846,2,1,3,night,Very quiet early morning hours
+2026-06-07T03:38-04:00,98b37dd5-bd64-4ace-add0-37f5135df600,St Nicholas Ave @ 125 St,Manhattan,40.810767,-73.952593,2,3,8,night,Very quiet early morning street
+2026-06-07T03:38-04:00,957fc40e-675c-4121-a3bc-ca3c0a246831,10 Ave @ 49 St,Manhattan,40.764212,-73.992385,2,3,12,night,"Late night, mostly parked cars, minimal pedestrians"
+2026-06-07T03:38-04:00,6a85384f-d82e-4bff-b5f1-15c22cca70e6,8th Ave @ 33rd St,Manhattan,40.751512,-73.993913,2,3,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,4f3f56e3-f68e-4b60-a4ba-153ecb9094f7,6 AVE @ 50 St,Manhattan,40.75994,-73.9805,2,3,4,night,"Early morning, minimal pedestrian activity"
+2026-06-07T03:38-04:00,08c40d18-cacf-4139-aa64-ba8f8602af53,Northern Blvd @ 82 St,Queens,40.755492,-73.885347,2,1,3,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,36b00c79-b2a0-49d3-800a-42b7db1847a8,Jamaica Ave @ Sutphin Blvd,Queens,40.701756,-73.80795,2,3,4,night,"Early morning, minimal pedestrian presence"
+2026-06-07T03:38-04:00,8188de4c-c144-4897-bee4-767022b832e9,Grand St (Borinquen Pl) @ Union Ave,Brooklyn,40.71096,-73.951087,2,3,2,night,Very quiet early morning hours
+2026-06-07T03:38-04:00,02d7db8e-481d-477e-9cdb-a2b6c6ec1ca3,2 Ave @ E 14 St,Manhattan,40.732373,-73.984954,2,3,12,night,"Late night, sparse pedestrian presence"
+2026-06-07T03:38-04:00,180dcc87-d861-43e3-8898-9ad5ee1a26a9,Lexington Ave @ 57 ST,Manhattan,40.7609271914359,-73.9691468531185,2,1,3,night,Very quiet early morning street
+2026-06-07T03:38-04:00,48cd1b5b-f361-4683-9d83-492d4789d7ea,Grand St @ Allen St,Manhattan,40.717382,-73.991308,2,3,4,night,"Early morning, minimal pedestrian activity"
+2026-06-07T03:38-04:00,52399045-4691-4258-8f82-12000f5719a8,Jamaica Ave @ 168 St,Queens,40.706371,-73.792539,2,8,12,night,Very quiet early morning hours
+2026-06-07T03:38-04:00,089d8066-4e5e-4549-9496-a5f4ffb56ef5,7 Ave @ 9 St,Brooklyn,40.666941,-73.981419,2,1,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,8cd15417-5b79-4065-9165-4b6ff0ff3f53,Broadway @ 46 St- Quad West,Manhattan,40.75872,-73.98539,3,8,4,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,aacb43bf-ed37-44c6-a2fe-8449a7851306,5 Ave @ 35 St ,Manhattan,40.749128,-73.984083,2,1,4,night,Very quiet late night street
+2026-06-07T03:38-04:00,7374a49f-373d-479a-b630-52bd07639260,Roosevelt Ave @ Elmhurst Ave,Queens,40.748456,-73.876234,1,0,4,night,"Empty residential street, late night"
+2026-06-07T03:38-04:00,96be7098-dda4-42da-bfe2-55bc5c6b94fb,Baxter St @ Canal Street,Manhattan,40.7175537302479,-73.999310720446,2,1,3,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,0c9a2836-c408-48d3-85c7-1977c33d9133,Broadway @ 46 St,Manhattan,40.758741,-73.985437,4,12,3,night,"Moderate foot traffic, typical evening scene"
+2026-06-07T03:38-04:00,8437bc26-9eb8-4915-93f7-f8ea4170e739,9 AVE @ 14 St,Manhattan,40.74095,-74.0053,2,3,2,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,bc2fd2da-1d56-46fa-a1ab-8674fac93877,7 Ave @ 43 St - 64.186 - PTZ,Manhattan,40.756707,-73.986442,2,1,0,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,bca4a4b0-d73f-4937-9301-85ff8293bd94,7 AVE @ 42 St,Manhattan,40.75609,-73.9869,2,1,8,night,"Early morning, minimal pedestrian presence"
+2026-06-07T03:38-04:00,4850e464-1111-4b5d-a72d-f54a0e12a789,8 Ave @ 49 St,Manhattan,40.761676,-73.986581,2,3,8,night,Very quiet late night street
+2026-06-07T03:38-04:00,4ebe49c8-3e68-43f7-b415-da3db9f72693,7 Ave @ 54 St,Manhattan,40.763617,-73.981436,2,3,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,63e79f0b-7dea-4c8e-864c-f3315f9cc62c,Grand St @ Broadway,Manhattan,40.720855,-74.000655,2,4,3,night,"Early morning, minimal pedestrian traffic"
+2026-06-07T03:38-04:00,bff9cee2-1513-4af3-9838-ea7a35552049,Rockefeller Plaza @ W 51 St,Manhattan,40.75973,-73.97807,2,1,2,night,"Very quiet, minimal pedestrian activity"
+2026-06-07T03:38-04:00,769a2e94-5bbc-4a03-86a7-39d3a70213f7,Broadway @ 96 St,Manhattan,40.794668,-73.971788,1,0,2,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,3df06012-4c10-46e1-81d0-55405342e8df,3 AVE @ 76 St,Manhattan,40.77234,-73.9587,2,8,6,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,d1c219c0-afdd-4fa4-a72c-cc1b1318b99d,9 Ave @ 23 St,Manhattan,40.7465085991952,-74.001366842392,2,0,2,night,"Empty street, early morning hours"
+2026-06-07T03:38-04:00,d1363c77-e061-4414-be82-e6d749254859,Madison Ave @ 42 St,Manhattan,40.7528121596316,-73.9792838595713,2,8,3,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,a249b3ee-bde9-4d6d-9a18-9cd2108d2eb0,Allen St @ Delancey St (B),Manhattan,40.719108,-73.99043,3,8,12,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,5bb6d7d8-39ce-43b8-b539-376fbcf73927,3 Ave @ 49 St,Manhattan,40.7552116061846,-73.9712421172846,3,8,4,night,"Late night, sparse pedestrian activity"
+2026-06-07T03:38-04:00,1eb66413-6761-4eb0-bc04-e2533bb74b42,Madison Ave @ 49 St,Manhattan,40.7572361824409,-73.9760573417802,2,3,4,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,d8122408-7092-41ba-a9db-ef8847edeaef,Broadway @ 43 St,Manhattan,40.756583,-73.986156,3,8,2,night,"Late night, sparse pedestrian activity"
+2026-06-07T03:38-04:00,5352e130-4668-4be5-a7b9-9e1ce4ea6d4c,3 Ave @ 42 St,Manhattan,40.7507631595424,-73.9744615986273,2,3,8,night,"Early morning, sparse pedestrian presence"
+2026-06-07T03:38-04:00,0952329e-6b6f-4286-b5e3-b682eae94e52,Broadway @ Chambers St,Manhattan,40.714177,-74.006307,2,3,8,night,"Early morning, minimal pedestrian presence"
+2026-06-07T03:38-04:00,c34ca47e-e375-4b9f-a8d7-f9737566b783,6 Ave @ 42 St,Manhattan,40.7548488195947,-73.9841249380499,2,3,2,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,05468f62-4092-4ff5-9bb6-0f70e56ff544,2 Ave @ 49 St,Manhattan,40.75426,-73.968991,2,3,4,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,62b3062d-542f-40f1-86ec-206710e789b6,3 Ave @ 57 St,Manhattan,40.760252895987,-73.967542473241,2,1,3,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,63bf5db0-582d-4482-ad51-52338c7f9906,3 Ave @ 14 St,Manhattan,40.733275,-73.987279,3,8,6,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,cd229284-a743-4ac4-9430-366f11e68d6c,Irving Pl @ 14 St,Manhattan,40.733984,-73.988693,2,1,3,night,Very quiet early morning street
+2026-06-07T03:38-04:00,ce81bdbd-967b-4ad0-ab40-c4628bb59560,Park Ave @ 106 St,Manhattan,40.79294,-73.9479,2,0,3,night,"Quiet late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,cdfc2dbe-7ce3-4775-ab7a-8440a9828358,Worth Street @ Bowery,Manhattan,40.713578,-73.998542,2,1,3,night,"Early morning, minimal pedestrian presence"
+2026-06-07T03:38-04:00,1546f761-039c-4b5c-af5e-75c83c9f603f,Lexington Ave @ 42 St,Manhattan,40.7514494972593,-73.976060779701,2,1,3,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,d78ebdc6-2211-479e-bda6-59d79db20258,8 Ave @ 57 St,Manhattan,40.766796,-73.9829,2,2,3,night,Very quiet late-night street
+2026-06-07T03:38-04:00,d45fb588-de4c-4139-9e27-5b2d4c371b3d,York Ave @ 72 St,Manhattan,40.76687,-73.9538,2,3,4,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,cb0647f4-b9fd-4065-a297-ebfcd4f8d270,Queens Plz S @ 27 St,Queens,40.7501753,-73.9398494,2,1,0,night,Very quiet early morning street
+2026-06-07T03:38-04:00,76faba94-f9e5-42d7-981e-0cbbbfd4bc21,Broadway @ 46 Street,Manhattan,40.758711,-73.985366,2,1,2,night,Very quiet early morning hours
+2026-06-07T03:38-04:00,6fa8acf2-f5bf-4200-afde-1240868ca3e3,Houston St @ Lafeyette St,Manhattan,40.725063,-73.995413,2,3,4,night,"Late night, minimal pedestrian traffic"
+2026-06-07T03:38-04:00,786650de-d254-47dc-aa8a-de9a4c231a2a,2 Ave @ 23 St,Manhattan,40.737876,-73.980926,2,3,4,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,fcfbaa3d-13e5-4687-9688-ae1eab37c723,7 Ave @ 23St,Manhattan,40.7441114245984,-73.9956503622239,2,3,2,night,Very quiet early morning street
+2026-06-07T03:38-04:00,7a7016c5-a086-40fd-9298-90f17f8b6cea,5 Ave @ 49 St,Manhattan,40.7579183170509,-73.9776717716469,2,1,3,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,79f45918-c13e-4357-9ccb-9e3e7ea5b6af,1 Ave @ 57 st,Manhattan,40.75823,-73.96289,2,3,2,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,b55781b8-827c-40e3-b094-27c289d22f7a,10 Ave @ 42 St,Manhattan,40.759663,-73.995317,2,3,4,night,Very quiet late night street
+2026-06-07T03:38-04:00,93dea5a7-a63f-4415-ae12-f32b62540f11,Kenmare St @ Cleveland pl,Manhattan,40.72147,-73.9974,2,1,3,night,Very quiet early morning block
+2026-06-07T03:38-04:00,fec41cf4-e167-48ae-9d40-785d8e86078d,MHB-16 Manhattan Colonade Entr,Manhattan,40.716139,-73.996063,2,3,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,899dfa1e-a2c5-490a-b8ba-480493634846,Coney Island Ave @ Kings Hwy,Brooklyn,40.607272,-73.961707,1,0,2,night,"Empty street, minimal activity"
+2026-06-07T03:38-04:00,85809312-60f2-4a52-a694-82628529c05a,Central Park S @ Columbus Cr,Manhattan,40.7677366852749,-73.9814615249633,2,3,2,night,Very quiet early morning street
+2026-06-07T03:38-04:00,c5af3e42-bb95-4aa3-a9d1-2d8071412dab,Jackson Ave @ Thomson Ave,Queens,40.746761,-73.943262,1,0,0,night,"Empty street, early morning hours"
+2026-06-07T03:38-04:00,7b0f1486-6c0c-4bd4-ac8b-800c4bf2176e,Flushing Ave @ Navy St,Brooklyn,40.698327,-73.980586,1,0,2,night,Very quiet late night street
+2026-06-07T03:38-04:00,ac9ea7e9-4ab8-4188-be33-40266bcf9378,2 AVE @ 86 St,Manhattan,40.77787,-73.9518,2,3,0,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,90f5542f-c3cf-4df2-a9b0-27a85606d659,Flatbush Ave@ 6 Ave,Brooklyn,40.6793036647623,-73.974552154541,3,8,5,night,"Light foot traffic, early morning hours"
+2026-06-07T03:38-04:00,f388803c-7e1b-4d67-ad61-87b25934a8a2,10 Ave @ 23 St,Manhattan,40.747694,-74.004174,2,8,6,night,"Late night, sparse pedestrian activity"
+2026-06-07T03:38-04:00,b5cf34ce-697e-42a1-b22f-8eb2c1f3e79e,1 Ave @ E. Houston St,Manhattan,40.723043,-73.988592,2,3,8,night,"Early morning, minimal pedestrian presence"
+2026-06-07T03:38-04:00,b331d9d1-c081-4476-8302-83445ac196e7,Dyer Ave @ 42 Street,Manhattan,40.7589811180163,-73.9939438000961,2,8,3,night,Very quiet early morning hours
+2026-06-07T03:38-04:00,ed12f2da-9f65-44f0-a162-123c412716c6,Canal Street @ Allen Street,Manhattan,40.7150861999536,-73.9925114202795,2,3,4,night,"Late night, minimal pedestrian activity"
+2026-06-07T03:38-04:00,ee1b1d85-e8ce-485f-a539-12962933eb9f,7 Ave @ 34 St,Manhattan,40.7510195668227,-73.9906285955498,3,12,8,night,"Early morning, sparse pedestrian traffic"
+2026-06-07T03:38-04:00,d47d2f63-cdc1-4f28-bc4c-e64ac07e4f1d,Union Sq @ 14 St,Manhattan,40.73483,-73.99087,2,3,5,night,"Early morning, sparse pedestrian activity"
+2026-06-07T03:38-04:00,eafc65f5-6ff9-4203-905f-3995b9fbc9eb,1 Ave @ 23 St,Manhattan,40.7368873405677,-73.9785319648825,2,3,8,night,"Late night, sparse pedestrian activity"
+2026-06-07T03:38-04:00,83bf2591-579d-415b-a0d4-fe39868b46d1,8 Ave @ 42 St,Manhattan,40.7572405048358,-73.9897804546602,2,3,8,night,"Early morning, minimal pedestrian activity"
+2026-06-07T03:38-04:00,f5c6fd9c-8e5b-4c3c-8c3e-31233678f15b,Lexington Ave @ 96 St,Manhattan,40.785793,-73.951017,1,0,1,night,"Empty street, late night, bus only"
+2026-06-07T03:38-04:00,f3d82b25-6b10-44c7-ae89-30df075a7ac8,Broadway @ 46 St- Quad North,Manhattan,40.758722,-73.98536,2,8,0,night,"Late night, sparse pedestrian activity"
+2026-06-07T03:38-04:00,e8a479f8-5170-4f1f-b258-b9745c966c71,Vanderbilt Ave @ E 45 St,Manhattan,40.754297,-73.976936,2,3,8,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,fb31c502-9b4a-4c19-9b26-5b84a1a39ec3,Amsterdam Ave @ 79 St,Manhattan,40.783141,-73.978322,2,3,4,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,f4e822f7-d2a2-4146-851c-04b2fa6d5265,5 Ave @ 42 St,Manhattan,40.7534920464028,-73.9808970054167,2,3,2,night,Very quiet early morning street
+2026-06-07T03:38-04:00,fc7db899-7a79-41f3-b9b1-b23ce64c5a5e,7 Ave @ 49 St,Manhattan,40.7604823513464,-73.983738054794,2,3,2,night,Very quiet late night street
+2026-06-07T03:38-04:00,f2964d50-042c-4021-8b52-992c08c6ff6f,8 Ave @ 34 St,Manhattan,40.7521973661027,-73.9934562042021,2,0,2,night,"Late night, minimal pedestrian presence"
+2026-06-07T03:38-04:00,f0b924fe-0df6-4ac2-85a2-5d2b96d081d5,7 Ave @ 57 St,Manhattan,40.765534775125,-73.9800400250842,2,1,3,night,Very quiet early morning street
