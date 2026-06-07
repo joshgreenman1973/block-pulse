@@ -152,7 +152,7 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
         <svg class="ekg" viewBox="0 0 40 40"><path d="M2 22 L10 22 L14 22 L17 8 L22 32 L26 18 L30 22 L38 22"/></svg>
         <div class="wordmark">BLOCK PULSE<small>NYC · LIVE STREET VITALS</small></div>
       </div>
-      <p class="tagline">How alive is a block, hour by hour — read off the city's own cameras by a vision model that <em>counts the street</em>.</p>
+      <p class="tagline">How busy is a block on foot, hour by hour — a vision model <em>counts the pedestrians</em> on the city's own cameras. Vehicles don't count.</p>
       <div class="status"><span class="dot-live"></span><span id="status">initializing feed…</span></div>
     </div>
 
@@ -166,29 +166,29 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
     </div>
 
     <div class="sec">
-      <div class="h"><i>02</i> Live activity layers</div>
+      <div class="h"><i>02</i> Live foot traffic</div>
       <div class="heat"></div>
-      <div class="heatlab"><span>0 · dead</span><span>5 · steady</span><span>10 · packed</span></div>
-      <label class="tog"><input type="checkbox" id="t-good" checked><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#5cc98a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pristine — heat = live activity<span class="meta">99</span></label>
+      <div class="heatlab"><span>0 · empty</span><span>5 · steady flow</span><span>10 · packed</span></div>
+      <label class="tog"><input type="checkbox" id="t-good" checked><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#5cc98a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pristine — heat = foot traffic<span class="meta">99</span></label>
       <label class="tog"><input type="checkbox" id="t-marg" checked><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#f0a830" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Usable with care<span class="meta">291</span></label>
       <label class="tog"><input type="checkbox" id="t-bad"><span class="box"><svg width="9" height="9" viewBox="0 0 10 10"><path d="M1 5 L4 8 L9 2" stroke="#8a909b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rejected — reveals dead zones<span class="meta">354</span></label>
     </div>
 
     <div class="sec">
-      <div class="h"><i>03</i> Most alive right now</div>
+      <div class="h"><i>03</i> Busiest on foot right now</div>
       <div id="leader"></div>
       <div class="readout"><span id="asof">—</span><span id="meanout"></span></div>
     </div>
 
     <div class="sec">
-      <div class="h"><i>04</i> Pulse by hour</div>
+      <div class="h"><i>04</i> Foot traffic by hour</div>
       <canvas id="rhythm"></canvas>
       <div class="note"><span class="tag">CALIBRATING</span><span id="rnote">Captured hourly on GitHub's servers. The trace fills into a full daily curve over the next day.</span></div>
     </div>
 
     <div class="sec">
       <div class="h"><i>05</i> Read this first</div>
-      <div class="note"><span class="tag">SAMPLE BIAS</span>These are <b>traffic</b> cameras, not street cameras. They see ~<b>1% of NYC's 6,300 street-miles</b> and ~7% of signals — clustered in Manhattan, which holds <b>87 of the 99 best</b>. The Bronx &amp; Staten Island are mostly highway and effectively unwatched. Read this as the pulse of <b>the blocks the city happens to watch</b>, not of New York.</div>
+      <div class="note"><span class="tag">SAMPLE BIAS</span>These are <b>traffic</b> cameras, not street cameras. They see ~<b>1% of NYC's 6,300 street-miles</b> and ~7% of signals — clustered in Manhattan, which holds <b>87 of the 99 best</b>. The Bronx &amp; Staten Island are mostly highway and effectively unwatched. Read this as the pulse of <b>the blocks the city happens to watch</b>, not of New York.<br><br>The score counts <b>people on foot only</b> — cars, buses and traffic are explicitly excluded.</div>
       <footer>
         Source · NYC DOT traffic cameras (webcams.nyctmc.org)<br>
         Graded &amp; scored by Claude Haiku · 352×240 frames, aggregate only — no individuals identifiable<br>
@@ -200,8 +200,8 @@ footer a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--lin
 
   <div id="map">
     <div class="legend">
-      <div class="ttl">SIGNAL</div>
-      <div class="row"><span class="d" style="background:#ff5a36;box-shadow:0 0 8px #ff5a36"></span>high activity</div>
+      <div class="ttl">FOOT TRAFFIC</div>
+      <div class="row"><span class="d" style="background:#ff5a36;box-shadow:0 0 8px #ff5a36"></span>crowded</div>
       <div class="row"><span class="d" style="background:#e0a830"></span>steady</div>
       <div class="row"><span class="d" style="background:#2f8a93"></span>quiet</div>
       <div class="row"><span class="d" style="background:#3a3f47"></span>not watchable</div>

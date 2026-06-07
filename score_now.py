@@ -17,11 +17,23 @@ MODEL = "claude-haiku-4-5-20251001"
 CAMS = json.load(open(os.path.join(HERE,"data","pristine.json")))
 LOG  = os.path.join(HERE,"data","activity_log.csv")
 
-PROMPT = """Rate the street-level human activity in this NYC street camera frame for an "how alive is this block" index.
+PROMPT = """Estimate FOOT TRAFFIC in this NYC street camera frame: people on foot only — pedestrians on
+sidewalks, in crosswalks, or waiting. This is a pedestrian index.
+
+CRITICAL: Ignore ALL vehicles. Cars, taxis, buses, trucks, vans and traffic do NOT count toward the
+score. A street jammed bumper-to-bumper with cars but empty of people scores 0-1. Do not let traffic,
+road width, or how "busy" the scene looks influence the number — count human beings on foot.
+
 Respond ONLY with compact JSON, no prose:
-{"activity":0-10,"peds":<approx pedestrians visible>,"vehicles":<approx moving/parked vehicles>,"lit":"day|dusk|night","note":"<=6 words"}
-activity scale: 0=empty/dead, 3=a few people, 5=steady foot traffic, 8=busy/crowded, 10=packed.
-Count people on sidewalks/crosswalks. Ignore vehicles for the activity score itself."""
+{"activity":0-10,"peds":<approx number of people on foot visible>,"vehicles":<approx vehicles, reference only>,"lit":"day|dusk|night","note":"<=6 words"}
+
+Score strictly by how many people are on foot:
+0 = nobody on foot
+1-2 = 1-3 people
+3-4 = a handful (about 4-10)
+5-6 = steady pedestrian flow (about 10-25)
+7-8 = busy, crowded sidewalks (about 25-60)
+9-10 = packed with people (60+)"""
 
 def fetch(cam):
     url=f"https://webcams.nyctmc.org/api/cameras/{cam['id']}/image"
